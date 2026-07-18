@@ -1,3 +1,8 @@
+[settings]
+# npm.package_manager is still gated behind the experimental flag.
+experimental = true
+npm.package_manager = "bun"
+
 [tools]
 "npm:renovate" = "43.269.3"
 
