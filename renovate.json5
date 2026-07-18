@@ -1,0 +1,57 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  // config:best-practices already implies pinGitHubActionDigests and
+  // dependencyDashboard; both are restated below to keep this preset's
+  // contract explicit for the repos that inherit it.
+  "extends": [
+    "config:best-practices",
+    "helpers:pinGitHubActionDigests",
+    ":semanticCommits"
+  ],
+  "pre-commit": {
+    "enabled": true
+  },
+  // Batch everything into one weekly window so dependency churn lands at a
+  // predictable time rather than trickling through the week.
+  "schedule": [
+    "before 9am on Saturday"
+  ],
+  "postUpdateOptions": [
+    "gomodTidy"
+  ],
+  // Applies to every schedule in this file, including the per-block overrides.
+  "timezone": "Europe/London",
+  // Regenerates lockfiles from existing constraints, catching transitive drift
+  // that never touches a manifest. best-practices sets this weekly; monthly
+  // avoids a large, hard-to-review diff competing for a prConcurrentLimit slot
+  // every Saturday. Own schedule overrides the top-level one.
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 9am on the first day of the month"]
+  },
+  // Default ("auto") rebases whenever a branch falls behind base, re-running CI
+  // each time. Branch rebases are not subject to the PR limits below, so this
+  // is the only thing capping that churn.
+  "rebaseWhen": "conflicted",
+  // Caps PR creation rate; near-inert under a once-weekly schedule, kept as a
+  // backstop for onboarding a repo with a large existing backlog.
+  "prHourlyLimit": 5,
+  // The limit that actually binds here: how many PRs stay open at once.
+  "prConcurrentLimit": 10,
+  "dependencyDashboard": true,
+  // Renovate locates the dashboard issue by title. Changing this orphans the
+  // existing issue and opens a new one in every inheriting repo.
+  "dependencyDashboardTitle": "[Bot] Dependency Dashboard",
+  // Supply-chain cooldown: skip releases younger than this so a compromised or
+  // immediately-yanked version is caught upstream before it reaches a PR.
+  "minimumReleaseAge": "3 days",
+  "osvVulnerabilityAlerts": true,
+  // Security fixes deliberately bypass both the cooldown and the weekly window
+  // above; a known-exploited CVE should not wait for Saturday.
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"],
+    "minimumReleaseAge": "0 days",
+    "schedule": ["at any time"]
+  }
+}
