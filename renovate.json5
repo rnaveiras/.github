@@ -33,6 +33,15 @@
   // each time. Branch rebases are not subject to the PR limits below, so this
   // is the only thing capping that churn.
   "rebaseWhen": "conflicted",
+  // Escape hatches for the conservative rebaseWhen above: applied by hand to a
+  // PR, these labels are how a human overrides Renovate per-branch. Renovate
+  // reads them, it never applies them itself.
+  "rebaseLabel": "renovate/rebase",
+  "stopUpdatingLabel": "renovate/stop-updating",
+  "keepUpdatedLabel": "renovate/keep-updated",
+  // Labels Renovate applies to the PRs it opens. Replaces (not merges with)
+  // any inherited default.
+  "labels": ["kind/deps"],
   // Caps PR creation rate; near-inert under a once-weekly schedule, kept as a
   // backstop for onboarding a repo with a large existing backlog.
   "prHourlyLimit": 5,
@@ -50,7 +59,7 @@
   // above; a known-exploited CVE should not wait for Saturday.
   "vulnerabilityAlerts": {
     "enabled": true,
-    "labels": ["security"],
+    "labels": ["kind/deps", "kind/security"],
     "minimumReleaseAge": "0 days",
     "schedule": ["at any time"]
   }
