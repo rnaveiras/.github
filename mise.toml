@@ -1,0 +1,7 @@
+[tools]
+"npm:renovate" = "43.269.3"
+
+[tasks.validate]
+description = "Validate the shared Renovate config"
+# --strict also fails on deprecated fields, not just schema errors.
+run = "renovate-config-validator --strict"
