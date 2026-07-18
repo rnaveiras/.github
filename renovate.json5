@@ -2,10 +2,15 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   // config:best-practices already implies pinGitHubActionDigests and
   // dependencyDashboard; both are restated below to keep this preset's
-  // contract explicit for the repos that inherit it.
+  // contract explicit for the repos that inherit it. The pin is upgraded to
+  // the ToSemver variant, which supersedes the implied one.
   "extends": [
     "config:best-practices",
-    "helpers:pinGitHubActionDigests",
+    // Pins the digest of the full-semver tag rather than the floating major,
+    // so the trailing comment reads `# v6.2.0` and identifies the exact
+    // release. Trade-off: actions that only publish major tags match no
+    // version here and stop being updated.
+    "helpers:pinGitHubActionDigestsToSemver",
     ":semanticCommits"
   ],
   "pre-commit": {
