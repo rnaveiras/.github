@@ -6,7 +6,7 @@ npm.package_manager = "bun"
 [tools]
 # Required by npm.package_manager above; mise does not provision it implicitly.
 bun = "1.3.14"
-"npm:renovate" = "43.269.3"
+"npm:renovate" = "43.288.0"
 
 [tasks.validate]
 description = "Validate the shared Renovate config"
